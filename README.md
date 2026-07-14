@@ -20,66 +20,29 @@ A modern and interactive 3D portfolio website built to showcase my skills, proje
 
 ## 🛠️ Tech Stack
 
-* React
-* Vite
-* Three.js / React Three Fiber
-* Tailwind CSS
-* JavaScript
 * HTML5
 * CSS3
+* JavaScript
+* Three.js
 
 ## 📂 Project Structure
 
 ```text
-src/
-├── assets/
-├── components/
-├── pages/
-├── hooks/
-├── utils/
-├── App.jsx
-└── main.jsx
+.
+└── index.html
 ```
 
-## ⚙️ Installation
+## 🚀 Getting Started
 
-Clone the repository:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/your-username/your-repository.git
 ```
 
-Navigate to the project folder:
+2. Open the project folder.
 
-```bash
-cd your-repository
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-```
-
-## 📬 Contact
-
-**Name:** Priyanshu Jain
-
-* LinkedIn: https://linkedin.com/in/your-profile
-* GitHub: https://github.com/your-username
-* Email: [your-email@example.com](mailto:your-email@example.com)
+3. Open `index.html` in your browser.
 
 ## 📄 License
 
