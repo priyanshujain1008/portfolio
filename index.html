@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Priyanshu Jain — Frontend Developer & UI/UX Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d13;
+    --bg-alt:#10151e;
+    --panel:#131926;
+    --line:#232b3a;
+    --brass:#c19a3f;
+    --brass-dim:#8a7130;
+    --ink:#4bb3d6;
+    --ink-dim:#2c6b82;
+    --text:#eae7dd;
+    --text-dim:#8991a3;
+    --paper:#f0ebe0;
+    --radius:2px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  ::selection{background:var(--brass);color:var(--bg);}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .display{font-family:'Fraunces',serif;}
+
+  /* subtle noise/vignette texture on bg */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(75,179,214,0.08), transparent 45%),
+      radial-gradient(ellipse at 90% 10%, rgba(193,154,63,0.06), transparent 40%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 6vw;
+    z-index:100;
+    background:linear-gradient(to bottom, rgba(10,13,19,0.9), transparent);
+    backdrop-filter:blur(2px);
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:0.02em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:6px;height:6px;background:var(--brass);border-radius:50%;display:inline-block;}
+  .nav-links{display:flex;gap:2.4rem;}
+  .nav-links a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    position:relative;
+    padding-bottom:3px;
+    transition:color 0.3s ease;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--brass);
+    transition:width 0.3s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    align-items:center;
+    padding:0 6vw;
+    gap:2rem;
+    z-index:1;
+    overflow:hidden;
+  }
+  .cursor-glow{
+    position:absolute;
+    width:520px;height:520px;
+    left:var(--gx, 30%);top:var(--gy, 30%);
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(193,154,63,0.14), rgba(75,179,214,0.06) 45%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+    transition:left 0.5s ease-out, top 0.5s ease-out;
+    will-change:left, top;
+  }
+  .ink-blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(40px);
+    opacity:0.35;
+    pointer-events:none;
+    z-index:0;
+  }
+  .ink-blob.b1{width:280px;height:280px;background:radial-gradient(circle, rgba(75,179,214,0.35), transparent 70%);top:8%;left:38%;animation:float1 14s ease-in-out infinite;}
+  .ink-blob.b2{width:220px;height:220px;background:radial-gradient(circle, rgba(193,154,63,0.3), transparent 70%);bottom:10%;left:44%;animation:float2 18s ease-in-out infinite;}
+  @keyframes float1{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,25px);}}
+  @keyframes float2{0%,100%{transform:translate(0,0);}50%{transform:translate(25px,-20px);}}
+  @media (prefers-reduced-motion: reduce){
+    .ink-blob{animation:none;}
+    .hero-title em{animation:none;}
+  }
+  .hero-copy{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--ink);
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:1.4rem;
+  }
+  .eyebrow::before{content:'';width:28px;height:1px;background:var(--ink);}
+  h1.hero-title{
+    font-size:clamp(2.6rem, 6vw, 5rem);
+    font-weight:700;
+    line-height:1.02;
+    letter-spacing:-0.01em;
+  }
+  h1.hero-title em{
+    font-style:italic;
+    font-weight:500;
+    background:linear-gradient(100deg, var(--brass) 20%, var(--ink) 50%, var(--brass) 80%);
+    background-size:250% auto;
+    background-position:0% center;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:shimmer 5s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%{background-position:0% center;}
+    50%{background-position:100% center;}
+    100%{background-position:0% center;}
+  }
+  .hero-sub{
+    margin-top:1.6rem;
+    max-width:38ch;
+    color:var(--text-dim);
+    font-size:1.02rem;
+  }
+  .hero-cta{
+    margin-top:2.4rem;
+    display:flex;gap:1rem;flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.82rem;
+    padding:0.85rem 1.5rem;
+    border-radius:var(--radius);
+    letter-spacing:0.03em;
+    transition:all 0.25s ease;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{
+    background:var(--brass);
+    color:#14110a;
+    font-weight:600;
+  }
+  .btn-primary:hover{background:#d9ad4c;transform:translateY(-2px);}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--ink);color:var(--ink);}
+
+  .hero-stage{
+    position:relative;
+    height:70vh;
+    min-height:420px;
+    z-index:1;
+  }
+  #scene-canvas{
+    width:100%;height:100%;display:block;
+  }
+  .stage-caption{
+    position:absolute;bottom:6px;left:0;right:0;
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    color:var(--text-dim);
+    letter-spacing:0.08em;
+    opacity:0.6;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:2.4rem;left:6vw;
+    display:flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;
+    color:var(--text-dim);
+    letter-spacing:0.08em;
+  }
+  .scroll-cue .line{width:1px;height:32px;background:var(--line);position:relative;overflow:hidden;}
+  .scroll-cue .line::after{
+    content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;
+    background:var(--brass);
+    animation:scrollmove 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollmove{
+    0%{top:-100%;}
+    50%{top:100%;}
+    100%{top:100%;}
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{
+    position:relative;z-index:1;
+    padding:7rem 6vw;
+    max-width:1280px;
+    margin:0 auto;
+  }
+  .section-head{
+    display:flex;align-items:baseline;gap:1rem;
+    margin-bottom:3rem;
+  }
+  .section-num{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--ink);
+    font-size:0.85rem;
+  }
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:clamp(1.8rem,3.4vw,2.6rem);
+    font-weight:600;
+  }
+  .section-title em{color:var(--brass);font-style:italic;font-weight:500;}
+  .reveal{
+    opacity:0;
+    transform:translateY(34px);
+    filter:blur(6px);
+    transition:opacity 0.9s cubic-bezier(.16,1,.3,1), transform 0.9s cubic-bezier(.16,1,.3,1), filter 0.9s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.is-visible{opacity:1;transform:translateY(0);filter:blur(0);}
+  .stagger > *{
+    opacity:0;transform:translateY(22px);
+    transition:opacity 0.7s cubic-bezier(.16,1,.3,1), transform 0.7s cubic-bezier(.16,1,.3,1);
+  }
+  .stagger.is-visible > *{opacity:1;transform:translateY(0);}
+  .stagger.is-visible > *:nth-child(1){transition-delay:0.02s;}
+  .stagger.is-visible > *:nth-child(2){transition-delay:0.09s;}
+  .stagger.is-visible > *:nth-child(3){transition-delay:0.16s;}
+  .stagger.is-visible > *:nth-child(4){transition-delay:0.23s;}
+  .stagger.is-visible > *:nth-child(5){transition-delay:0.30s;}
+  .stagger.is-visible > *:nth-child(6){transition-delay:0.37s;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;
+  }
+  .about-text p{color:var(--text-dim);margin-bottom:1.2rem;max-width:56ch;}
+  .about-text strong{color:var(--text);font-weight:600;}
+
+  .chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.74rem;
+    padding:0.35rem 0.65rem;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    color:var(--text-dim);
+    transition:all 0.25s ease;
+  }
+  .chip:hover{border-color:var(--brass);color:var(--brass);transform:translateY(-2px);}
+
+  /* ---- skill nodes: rotating gradient-ring cards ---- */
+  .skill-orbit-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;
+  }
+  .skill-node{
+    position:relative;
+    padding:1.5rem 1.4rem;
+    border-radius:10px;
+    background:var(--panel);
+    overflow:hidden;
+    isolation:isolate;
+    transition:transform 0.4s cubic-bezier(.16,1,.3,1);
+  }
+  .skill-node:hover{transform:translateY(-5px);}
+  .skill-node::before{
+    content:'';
+    position:absolute;inset:-3px;
+    background:conic-gradient(from 0deg, var(--accent), transparent 25%, transparent 75%, var(--accent));
+    border-radius:inherit;
+    z-index:-2;
+    animation:spin 7s linear infinite;
+  }
+  .skill-node::after{
+    content:'';
+    position:absolute;inset:1.5px;
+    background:var(--panel);
+    border-radius:9px;
+    z-index:-1;
+  }
+  .skill-node.ink{--accent:var(--ink);}
+  .skill-node.brass{--accent:var(--brass);}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .skill-node-head{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;}
+  .skill-node-num{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);
+    width:22px;height:22px;border:1px solid var(--accent);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .skill-node h4{font-family:'Fraunces',serif;font-weight:600;font-size:1.02rem;}
+  .skill-node-chips{display:flex;flex-wrap:wrap;gap:6px;}
+
+  /* ---- infinite tool marquee ---- */
+  .tool-marquee{
+    margin-top:1.1rem;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  }
+  .tool-marquee-track{
+    display:flex;gap:2.2rem;width:max-content;
+    animation:marquee 22s linear infinite;
+  }
+  .tool-marquee:hover .tool-marquee-track{animation-play-state:paused;}
+  .tool-marquee-track span{
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--text-dim);
+    display:flex;align-items:center;gap:8px;white-space:nowrap;
+  }
+  .tool-marquee-track span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--brass);}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion: reduce){
+    .skill-node::before{animation:none;}
+    .tool-marquee-track{animation:none;}
+  }
+  @media (max-width:900px){
+    .skill-orbit-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- EXPERIENCE (git log style) ---------- */
+  .log{border-left:1px solid var(--line);padding-left:2rem;position:relative;}
+  .log-entry{position:relative;margin-bottom:2.6rem;}
+  .log-entry:last-child{margin-bottom:0;}
+  .log-entry::before{
+    content:'';
+    position:absolute;left:-2.09rem;top:6px;
+    width:9px;height:9px;border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--ink);
+  }
+  .log-hash{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.76rem;color:var(--ink);
+    display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap;
+    margin-bottom:0.35rem;
+  }
+  .log-hash .date{color:var(--text-dim);}
+  .log-role{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;margin-bottom:0.6rem;}
+  .log-role span{color:var(--brass);font-weight:500;font-style:italic;}
+  .log-entry ul{list-style:none;color:var(--text-dim);font-size:0.94rem;}
+  .log-entry li{position:relative;padding-left:1.2rem;margin-bottom:0.4rem;}
+  .log-entry li::before{content:'+';position:absolute;left:0;color:var(--ink-dim);font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- PROJECTS ---------- */
+  .project-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;
+  }
+  .project-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:1.8rem;
+    transition:transform 0.3s ease, border-color 0.3s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .project-card::before{
+    content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+    background:linear-gradient(90deg, var(--brass), var(--ink));
+    transform:scaleX(0);transform-origin:left;
+    transition:transform 0.4s ease;
+  }
+  .project-card:hover{transform:translateY(-6px);border-color:var(--line);}
+  .project-card:hover::before{transform:scaleX(1);}
+  .project-name{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;margin-bottom:0.3rem;}
+  .project-stack{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--ink);
+    margin-bottom:0.9rem;letter-spacing:0.02em;
+  }
+  .project-card p{color:var(--text-dim);font-size:0.9rem;margin-bottom:0.4rem;}
+
+  /* ---------- EDUCATION / CERTS ---------- */
+  .edu-cert-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;}
+  .edu-card{
+    border:1px solid var(--line);border-radius:var(--radius);padding:1.8rem;background:var(--panel);
+  }
+  .edu-card h3{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;margin-bottom:0.3rem;}
+  .edu-card .meta{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--ink);margin-bottom:0.9rem;}
+  .cgpa{
+    display:inline-block;margin-top:0.6rem;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;
+    color:var(--brass);border:1px solid var(--brass-dim);padding:0.3rem 0.7rem;border-radius:var(--radius);
+  }
+  .coursework{margin-top:1rem;display:flex;flex-wrap:wrap;gap:6px;}
+  .cert-list{list-style:none;}
+  .cert-list li{
+    padding:0.9rem 0;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;color:var(--text-dim);font-size:0.92rem;
+  }
+  .cert-list li:last-child{border-bottom:none;}
+  .cert-list .badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--brass);}
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact{
+    text-align:center;
+    padding-top:6rem;padding-bottom:5rem;
+  }
+  .contact .section-title{font-size:clamp(2rem,5vw,3.4rem);}
+  .contact p.lead{color:var(--text-dim);max-width:44ch;margin:1rem auto 2.4rem;}
+  .contact-links{display:flex;justify-content:center;gap:1.4rem;flex-wrap:wrap;margin-bottom:3rem;}
+  .contact-links a{
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    padding:0.8rem 1.4rem;border:1px solid var(--line);border-radius:var(--radius);
+    color:var(--text-dim);transition:all 0.25s ease;
+  }
+  .contact-links a:hover{border-color:var(--ink);color:var(--ink);}
+  footer{
+    text-align:center;padding:2rem 6vw;color:var(--text-dim);
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;padding-top:7rem;}
+    .hero-stage{height:44vh;min-height:320px;order:-1;}
+    .about-grid,.edu-cert-grid{grid-template-columns:1fr;gap:2.4rem;}
+    .nav-links{display:none;}
+    .scroll-cue{display:none;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{transition:none;opacity:1;transform:none;}
+    .scroll-cue .line::after{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="dot"></span>Priyanshu<span class="mono" style="color:var(--text-dim);font-weight:400;">.jain</span></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" style="padding-top:5rem;">
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="ink-blob b1"></div>
+  <div class="ink-blob b2"></div>
+  <div class="hero-copy">
+    <div class="eyebrow">Frontend Developer — UI/UX Designer</div>
+    <h1 class="hero-title">Priyanshu Jain <br> designs with a <em>pen</em>, ships with <em>code</em>.</h1>
+    <p class="hero-sub">A Computer Science undergrad at COER University building responsive, accessible interfaces — from Figma wireframe to production React. Currently sketching in Three.js and Framer Motion.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Work →</a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-stage">
+    <canvas id="scene-canvas"></canvas>
+    <div class="stage-caption">drag to look around — the pen never stops writing</div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>SCROLL</div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="section-head reveal">
+    <span class="section-num mono">01</span>
+    <h2 class="section-title">About <em>&amp; Stack</em></h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm a Computer Science undergraduate from <strong>Saharanpur, Uttar Pradesh</strong>, currently completing my B.Tech at COER University, Roorkee. My work sits at the intersection of design and engineering — I sketch a flow in Figma, then build it in React the same afternoon.</p>
+      <p>I care about the details most people scroll past: focus states, motion that respects the user, layouts that hold up on a cracked mid-range phone screen. I've shipped AI-assisted tools, booking interfaces and an NLP safety system, and I'm currently deep in Three.js and React Three Fiber — which is exactly what's spinning next to this paragraph.</p>
+    </div>
+    <div class="skill-groups reveal">
+      <div class="skill-orbit-grid stagger">
+        <div class="skill-node ink">
+          <div class="skill-node-head"><span class="skill-node-num">01</span><h4>Frontend</h4></div>
+          <div class="skill-node-chips">
+            <span class="chip">React.js</span><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Tailwind CSS</span>
+          </div>
+        </div>
+        <div class="skill-node brass">
+          <div class="skill-node-head"><span class="skill-node-num">02</span><h4>Backend</h4></div>
+          <div class="skill-node-chips">
+            <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">REST APIs</span><span class="chip">MySQL</span>
+          </div>
+        </div>
+        <div class="skill-node brass">
+          <div class="skill-node-head"><span class="skill-node-num">03</span><h4>Design</h4></div>
+          <div class="skill-node-chips">
+            <span class="chip">Figma</span><span class="chip">Wireframing</span><span class="chip">Prototyping</span><span class="chip">User Flow</span>
+          </div>
+        </div>
+        <div class="skill-node ink">
+          <div class="skill-node-head"><span class="skill-node-num">04</span><h4>Languages</h4></div>
+          <div class="skill-node-chips">
+            <span class="chip">Java</span><span class="chip">JavaScript</span><span class="chip">Python</span><span class="chip">SQL</span>
+          </div>
+        </div>
+      </div>
+      <div class="tool-marquee reveal">
+        <div class="tool-marquee-track" id="marqueeTrack">
+          <span>Git</span><span>GitHub</span><span>VS Code</span><span>Vercel</span><span>Figma</span><span>Postman</span><span>npm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="section-head reveal">
+    <span class="section-num mono">02</span>
+    <h2 class="section-title">Experience <em>log</em></h2>
+  </div>
+  <div class="log reveal stagger">
+    <div class="log-entry">
+      <div class="log-hash">commit <span style="color:var(--brass);">a1f9c2e</span><span class="date">— June 2026 – August 2026</span></div>
+      <div class="log-role">Full Stack Developer Intern <span>@ TRL Future X</span></div>
+      <ul>
+        <li>Developed responsive web applications using React.js, HTML, CSS and JavaScript.</li>
+        <li>Integrated REST APIs and collaborated across frontend and backend modules.</li>
+        <li>Used Git/GitHub while following Agile software development practices.</li>
+        <li>Improved application responsiveness and overall user experience.</li>
+      </ul>
+    </div>
+    <div class="log-entry">
+      <div class="log-hash">commit <span style="color:var(--brass);">7d3e0b1</span><span class="date">— Forage Job Simulation</span></div>
+      <div class="log-role">Data Analytics Job Simulation <span>@ Deloitte Australia</span></div>
+      <ul>
+        <li>Completed practical tasks involving business analytics and data visualization.</li>
+        <li>Analyzed datasets and built dashboards to support business decisions.</li>
+        <li>Applied analytical thinking to real-world business scenarios.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="section-head reveal">
+    <span class="section-num mono">03</span>
+    <h2 class="section-title">Selected <em>projects</em></h2>
+  </div>
+  <div class="project-grid reveal stagger">
+    <div class="project-card">
+      <div class="project-name">AI Code Reviewer</div>
+      <div class="project-stack">React.js · Node.js · Gemini API</div>
+      <p>AI-powered code review platform with a Monaco-based, IDE-like editing experience.</p>
+      <p>Real-time AI feedback, syntax highlighting and markdown rendering in a clean, responsive UI.</p>
+    </div>
+    <div class="project-card">
+      <div class="project-name">CineBook</div>
+      <div class="project-stack">React.js · Tailwind CSS</div>
+      <p>Movie ticket booking interface with reusable components for listings, seat selection and checkout.</p>
+      <p>Built with accessibility, responsive layouts and intuitive navigation as first-class goals.</p>
+    </div>
+    <div class="project-card">
+      <div class="project-name">Cyberbullying Detection System</div>
+      <div class="project-stack">Python · PyTorch · DistilBERT</div>
+      <p>NLP-based detection system with full preprocessing and training pipeline.</p>
+      <p>Evaluated using Precision, Recall and F1-Score for reliable classification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EDUCATION / CERTS ================= -->
+<section id="education">
+  <div class="section-head reveal">
+    <span class="section-num mono">04</span>
+    <h2 class="section-title">Education <em>&amp; proof</em></h2>
+  </div>
+  <div class="edu-cert-grid reveal">
+    <div class="edu-card">
+      <h3>Bachelor of Technology — Computer Science Engineering</h3>
+      <div class="meta">COER University, Roorkee · Aug 2023 – Jul 2027</div>
+      <span class="cgpa">CGPA 7.76 / 10</span>
+      <div class="coursework">
+        <span class="chip">Data Structures &amp; Algorithms</span>
+        <span class="chip">DBMS</span>
+        <span class="chip">Operating Systems</span>
+        <span class="chip">OOP</span>
+        <span class="chip">Software Engineering</span>
+      </div>
+    </div>
+    <div>
+      <ul class="cert-list">
+        <li>Deloitte Australia Data Analytics Job Simulation <span class="badge">FORAGE</span></li>
+        <li>50 Days Coding Badge <span class="badge">LEETCODE</span></li>
+        <li>Learning Three.js, R3F &amp; Framer Motion <span class="badge">IN PROGRESS</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="contact">
+  <div class="section-head reveal" style="justify-content:center;">
+    <span class="section-num mono">05</span>
+    <h2 class="section-title">Let's <em>build</em> something</h2>
+  </div>
+  <p class="lead reveal">Open to frontend and full-stack roles, internships, and collaborations. The pen's ready — just say the word.</p>
+  <div class="contact-links reveal stagger">
+    <a href="mailto:cu23250461@coeruniversity.ac.in">cu23250461@coeruniversity.ac.in</a>
+    <a href="tel:+917895878257">+91-7895878257</a>
+    <a href="#">GitHub ↗</a>
+    <a href="#">LinkedIn ↗</a>
+    <a href="#">LeetCode ↗</a>
+  </div>
+</section>
+
+<footer>Priyanshu Jain — Saharanpur, Uttar Pradesh · Designed &amp; built with HTML, CSS, JS and Three.js</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  /* ---------- scroll reveal ---------- */
+  const revealEls = document.querySelectorAll('.reveal, .stagger');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  /* ---------- infinite tool marquee: duplicate content for seamless loop ---------- */
+  const marqueeTrack = document.getElementById('marqueeTrack');
+  if(marqueeTrack){ marqueeTrack.innerHTML += marqueeTrack.innerHTML; }
+
+  /* ---------- cursor glow follows pointer in hero ---------- */
+  const heroSection = document.querySelector('.hero');
+  const cursorGlow = document.getElementById('cursorGlow');
+  if(heroSection && cursorGlow){
+    heroSection.addEventListener('pointermove', (e)=>{
+      const rect = heroSection.getBoundingClientRect();
+      const px = ((e.clientX - rect.left) / rect.width) * 100;
+      const py = ((e.clientY - rect.top) / rect.height) * 100;
+      cursorGlow.style.setProperty('--gx', px + '%');
+      cursorGlow.style.setProperty('--gy', py + '%');
+    });
+  }
+
+  /* ---------- project card 3D tilt on hover ---------- */
+  document.querySelectorAll('.project-card').forEach(card=>{
+    card.addEventListener('pointermove', (e)=>{
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `translateY(-6px) perspective(600px) rotateX(${py * -8}deg) rotateY(${px * 10}deg)`;
+    });
+    card.addEventListener('pointerleave', ()=>{ card.style.transform = ''; });
+  });
+
+  /* ---------- THREE.JS SCENE: rotating pen + laptop ---------- */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('scene-canvas');
+  const stage = canvas.parentElement;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, stage.clientWidth/stage.clientHeight, 0.1, 100);
+  camera.position.set(0, 1.1, 7.2);
+
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(stage.clientWidth, stage.clientHeight);
+
+  // lights
+  scene.add(new THREE.AmbientLight(0x8a93a8, 0.7));
+  const key = new THREE.DirectionalLight(0xffffff, 1.1);
+  key.position.set(4, 6, 5);
+  scene.add(key);
+  const gold = new THREE.PointLight(0xc19a3f, 1.4, 12);
+  gold.position.set(-3, 1, 3);
+  scene.add(gold);
+  const cyan = new THREE.PointLight(0x4bb3d6, 1.2, 12);
+  cyan.position.set(3, -1, 2);
+  scene.add(cyan);
+
+  const matGraphite = new THREE.MeshStandardMaterial({color:0x1a2029, roughness:0.55, metalness:0.35});
+  const matGraphiteLight = new THREE.MeshStandardMaterial({color:0x232b3a, roughness:0.5, metalness:0.3});
+  const matBrass = new THREE.MeshStandardMaterial({color:0xc19a3f, roughness:0.3, metalness:0.75});
+  const matSilver = new THREE.MeshStandardMaterial({color:0xd9dee5, roughness:0.25, metalness:0.85});
+
+  /* ----- laptop group ----- */
+  const laptop = new THREE.Group();
+
+  function makeScreenTexture(){
+    const c = document.createElement('canvas');
+    c.width = 512; c.height = 320;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1420'; ctx.fillRect(0,0,c.width,c.height);
+    ctx.font = '20px monospace';
+    const lines = [
+      [['function ', '#c19a3f'], ['buildPortfolio() {', '#eae7dd']],
+      [['  role', '#4bb3d6'], [': "Frontend + UI/UX",', '#eae7dd']],
+      [['  stack', '#4bb3d6'], [': ["React","Node","Tailwind"],', '#eae7dd']],
+      [['  status', '#4bb3d6'], [': "available",', '#eae7dd']],
+      [['}', '#eae7dd']],
+      [['// building something good...', '#5a6272']]
+    ];
+    let y = 46;
+    lines.forEach(segs=>{
+      let x = 24;
+      segs.forEach(([text,color])=>{
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y);
+        x += ctx.measureText(text).width;
+      });
+      y += 34;
+    });
+    const tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+
+  const base = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.14, 1.8), matGraphite);
+  base.position.y = -0.55;
+  laptop.add(base);
+
+  const trackpad = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.01, 0.7), matGraphiteLight);
+  trackpad.position.set(0, -0.48, 0.35);
+  laptop.add(trackpad);
+
+  const screenPivot = new THREE.Group();
+  screenPivot.position.set(0, -0.48, -0.88);
+  laptop.add(screenPivot);
+
+  const screenFrame = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.65, 0.09), matGraphite);
+  screenFrame.position.set(0, 0.83, 0);
+  screenFrame.rotation.x = -0.24;
+  screenPivot.add(screenFrame);
+
+  const screenFace = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.34, 1.4),
+    new THREE.MeshBasicMaterial({map: makeScreenTexture()})
+  );
+  screenFace.position.set(0, 0.83, 0.046);
+  screenFace.rotation.x = -0.24;
+  screenPivot.add(screenFace);
+
+  laptop.position.set(1.15, -0.35, 0);
+  laptop.rotation.y = -0.5;
+  scene.add(laptop);
+
+  /* ----- pen group ----- */
+  const pen = new THREE.Group();
+  const penBody = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 1.7, 24), matBrass);
+  penBody.rotation.z = Math.PI/2;
+  pen.add(penBody);
+
+  const penTip = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.32, 24), matSilver);
+  penTip.rotation.z = -Math.PI/2;
+  penTip.position.x = 1.01;
+  pen.add(penTip);
+
+  const penCap = new THREE.Mesh(new THREE.CylinderGeometry(0.062, 0.062, 0.28, 24), matSilver);
+  penCap.rotation.z = Math.PI/2;
+  penCap.position.x = -0.95;
+  pen.add(penCap);
+
+  const penGroup = new THREE.Group();
+  penGroup.add(pen);
+  scene.add(penGroup);
+
+  /* ----- ink trail from pen tip ----- */
+  const TRAIL_LEN = 60;
+  const trailPositions = new Float32Array(TRAIL_LEN * 3);
+  const trailGeo = new THREE.BufferGeometry();
+  trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+  const trailMat = new THREE.LineBasicMaterial({color:0xc19a3f, transparent:true, opacity:0.45, blending:THREE.AdditiveBlending});
+  const trailLine = new THREE.Line(trailGeo, trailMat);
+  scene.add(trailLine);
+  const trailPts = [];
+
+  const tipWorld = new THREE.Vector3();
+
+  /* ----- interaction: mouse parallax ----- */
+  let mouseX = 0, mouseY = 0;
+  stage.addEventListener('pointermove', (e)=>{
+    const rect = stage.getBoundingClientRect();
+    mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+  });
+
+  function onResize(){
+    camera.aspect = stage.clientWidth / stage.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+  }
+  window.addEventListener('resize', onResize);
+
+  let t = 0;
+  function animate(){
+    if(!prefersReduced){
+      t += 0.012;
+
+      // laptop: slow idle rotation + mouse parallax
+      laptop.rotation.y = -0.5 + Math.sin(t*0.5)*0.12 + mouseX*0.15;
+      laptop.rotation.x = mouseY*0.05;
+
+      // pen: orbits near laptop while spinning on its own axis
+      const orbitR = 1.9;
+      const ox = -1.3 + Math.cos(t*0.6)*orbitR*0.55;
+      const oz = Math.sin(t*0.6)*orbitR*0.5 + 0.4;
+      const oy = 0.55 + Math.sin(t*1.4)*0.22;
+      penGroup.position.set(ox, oy, oz);
+      penGroup.rotation.y = t*0.6 + Math.PI/2;
+      penGroup.rotation.z = Math.sin(t*0.9)*0.25;
+      pen.rotation.x = t*2.2; // spin on its own long axis
+
+      // update ink trail from tip position
+      penTip.getWorldPosition(tipWorld);
+      trailPts.push(tipWorld.clone());
+      if(trailPts.length > TRAIL_LEN) trailPts.shift();
+      for(let i=0;i<TRAIL_LEN;i++){
+        const p = trailPts[i] || trailPts[0] || tipWorld;
+        trailPositions[i*3] = p.x;
+        trailPositions[i*3+1] = p.y;
+        trailPositions[i*3+2] = p.z;
+      }
+      trailGeo.attributes.position.needsUpdate = true;
+
+      gold.intensity = 1.2 + Math.sin(t*2)*0.2;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    } else {
+      renderer.render(scene, camera);
+    }
+  }
+  onResize();
+  animate();
+</script>
+</body>
+</html>
